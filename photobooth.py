@@ -88,12 +88,14 @@ def start_run():
 	global filename_schema
 	global canvas
 	global h, space
+	global line
 	filename_schema = time.strftime("photos/%Y%m%d-%H%M%S---{}.jpg")
 	print "h: " + str(h)
 	width = space*2+IMAGE_SIZE
 	print "width: " + str(width)
 	canvas.create_rectangle(0, 0, width, h, fill="White")
 	canvas.pack()
+	line = 0
 	advance_line()
 
 def reset_usb():
