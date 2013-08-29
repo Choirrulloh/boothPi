@@ -7,6 +7,7 @@ import subprocess
 import re
 import Image, ImageTk, ImageOps
 import RPi.GPIO as GPIO
+import os, sys
 
 IMAGE_SIZE = 240
 
@@ -87,7 +88,7 @@ def start_run():
 	global filename_schema
 	global canvas
 	global h, space
-	filename_schema = time.strftime("%Y%m%d-%H%M%S---{}.jpg")
+	filename_schema = time.strftime("photos/%Y%m%d-%H%M%S---{}.jpg")
 	print "h: " + str(h)
 	width = space*2+IMAGE_SIZE
 	print "width: " + str(width)
@@ -98,7 +99,7 @@ def start_run():
 def reset_usb():
 	global usb_device
 	print "In reset_usb()"
-	cmd = "/home/pi/usbreset " + usb_device
+	cmd = os.path.abspath(os.path.dirname(sys.argv[0])) + "/usbreset " + usb_device
 	print "Executing: " + cmd
 	subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True).stdout.read()
 
