@@ -58,6 +58,7 @@ canvas = Canvas(root, width=w, height=h, bg="Black")
 canvas.pack()
 
 text = canvas.create_text(w/2, h/2, text="PhotoBooth v0.1", fill="red", anchor="c")
+text_offset = 0
 
 filename_schema = "photos/this-should-not-happen---{}.jpg"
 
@@ -77,7 +78,6 @@ usb_device = detect_usb()
 
 def check_button_pressed():
 	global root
-	print "check_button_pressed()"
 	button_pressed = GPIO.input(12)
 	if button_pressed:
 		start_run()
@@ -89,11 +89,13 @@ def start_run():
 	global canvas
 	global h, space
 	global line
+	global text_offset
 	filename_schema = time.strftime("photos/%Y%m%d-%H%M%S---{}.jpg")
 	print "h: " + str(h)
 	width = space*2+IMAGE_SIZE
 	print "width: " + str(width)
 	canvas.create_rectangle(0, 0, width, h, fill="White")
+	text_offset = width / 2
 	canvas.pack()
 	line = 0
 	advance_line()
@@ -108,8 +110,9 @@ def reset_usb():
 def display_text(string):
 	global canvas
 	global text
+	global text_offset
 	canvas.delete(text)
-	text = canvas.create_text(w/2, h/2, text=string, fill="#45ADA6", anchor="c", font="Lucida 90", justify=CENTER)
+	text = canvas.create_text(w/2+text_offset, h/2, text=string, fill="#45ADA6", anchor="c", font="Lucida 90", justify=CENTER)
 
 def take_photo(number):
 	global filename_schema
@@ -147,6 +150,11 @@ def show_overview():
 def advance_line():
 	global line
 	global lines
+	if line+1 == len(lines):
+		global text_offset
+		text_offset = 0
+		global canvas
+		canvas.delete(ALL)
 	if line>=len(lines):
 		line = 0
 		return
