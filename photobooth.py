@@ -3,7 +3,7 @@
 
 from Tkinter import *
 import time
-import subprocess
+import subprocess, threading
 import re
 import Image, ImageTk, ImageOps
 import RPi.GPIO as GPIO
@@ -14,6 +14,44 @@ IMAGE_SIZE = 240
 def quit():
 	root.destroy()
 
+class PhotoThread(threading.Thread):
+	def __init__(self):
+		threading.Thread.__init__(self)
+		self.photo_taken = False
+
+	def set_data(self, filename, number):
+		self.filename = filename
+		self.number = number
+	
+	def run(self):
+		self.photo_taken = False
+		# Take the photo
+		reset_usb()
+		print("This is take_photo().")
+		process = subprocess.Popen("gphoto2 --capture-image-and-download --force-overwrite --filename " + self.filename, stdout=subprocess.PIPE, shell=True)
+		while True:
+			line = process.stdout.readline()
+			if line == '':
+				break
+			if line.startswith("New file is in"):
+				self.photo_taken = True
+
+		PhotoLoadThread(self.filename, self.number)
+
+class PhotoLoadThread(threading.Thread):
+	def __init__(self, filename, number):
+		threading.Thread.__init__(self)
+		self.filename = filename
+		self.number = number
+
+	def run(self):
+		global images, canvas
+		# Load the photo
+		image = Image.open(filename)
+		image = ImageOps.fit(image, (IMAGE_SIZE, IMAGE_SIZE)) # image.thumbnail((IMAGE_SIZE, IMAGE_SIZE), Image.ANTIALIAS)
+		images[number-1] = ImageTk.PhotoImage(image)
+		canvas.create_image(space, number*space + (number-1)*IMAGE_SIZE, image=images[number-1], anchor="nw")
+		canvas.pack()
 
 line = 0
 lines = [
@@ -61,6 +99,8 @@ text = canvas.create_text(w/2, h/2, text="PhotoBooth v0.1", fill="red", anchor="
 text_offset = 0
 
 filename_schema = "photos/this-should-not-happen---{}.jpg"
+
+photo_thread = PhotoThread()
 
 GPIO.setup(12, GPIO.IN)
 
@@ -115,7 +155,16 @@ def display_text(string):
 	text = canvas.create_text(w/2+text_offset, h/2, text=string, fill="#45ADA6", anchor="c", font="Lucida 90", justify=CENTER)
 
 def take_photo(number):
+	global photo_thread
 	global filename_schema
+	photo_thread.set_data(filename_schema.format(number), number)
+	photo_thread.run()
+	while True:
+		print "Warte auf photo_taken..."
+		if photo_thread.photo_taken:
+			break
+		time.sleep(0.1)
+	return
 	global canvas
 	global images
 	global space
