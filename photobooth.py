@@ -9,7 +9,7 @@ import Image, ImageTk, ImageOps
 import RPi.GPIO as GPIO
 import os, sys
 
-IMAGE_SIZE = 240
+IMAGE_SIZE = 500
 
 def quit():
 	root.destroy()
