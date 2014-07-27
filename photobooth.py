@@ -36,7 +36,9 @@ class PhotoThread(threading.Thread):
 			if line.startswith("New file is in"):
 				self.photo_taken = True
 
-		PhotoLoadThread(self.filename, self.number)
+		global photo_load_threads
+		photo_load_threads[self.number-1] = PhotoLoadThread(self.filename, self.number-1)
+		photo_load_threads[self.number-1].start()
 
 class PhotoLoadThread(threading.Thread):
 	def __init__(self, filename, number):
@@ -45,12 +47,39 @@ class PhotoLoadThread(threading.Thread):
 		self.number = number
 
 	def run(self):
+		print "PhotoLoadThread " + str(self.index) + " starting..."
 		global images, canvas
 		# Load the photo
-		image = Image.open(filename)
-		image = ImageOps.fit(image, (IMAGE_SIZE, IMAGE_SIZE)) # image.thumbnail((IMAGE_SIZE, IMAGE_SIZE), Image.ANTIALIAS)
-		images[number-1] = ImageTk.PhotoImage(image)
-		canvas.create_image(space, number*space + (number-1)*IMAGE_SIZE, image=images[number-1], anchor="nw")
+		print "PhotoLoadThread " + str(self.index) + ": Opening..."
+		self.image = Image.open(self.filename)
+		print "PhotoLoadThread " + str(self.index) + ": Fitting..."
+		self.image = ImageOps.fit(self.image, (IMAGE_SIZE, IMAGE_SIZE)) # image.thumbnail((IMAGE_SIZE, IMAGE_SIZE), Image.ANTIALIAS)
+		print "PhotoLoadThread " + str(self.index) + ": TKing..."
+		images[self.index] = ImageTk.PhotoImage(self.image)
+		print "PhotoLoadThread " + str(self.index) + " finished."
+
+	def show_photo(self, canvas):
+		global w, h, IMAGE_SIZE
+		x = 0
+		y = 0
+		anchor = ""
+
+		if (self.index / 2 == 0):
+			anchor = "s"
+			y = h/2 - 25
+		else:
+			anchor = "n"
+			y = h/2 + 25
+
+		if (self.index % 2 == 0):
+			anchor += "e"
+			x = w/2 - 25
+		else:
+			anchor += "w"
+			x = w/2 + 25
+
+		canvas.create_image(x, y, image=images[self.index], anchor=anchor)
+		#canvas.create_image(space, self.index*space + (self.index-1)*IMAGE_SIZE, image=images[self.index], anchor="nw")
 		canvas.pack()
 
 line = 0
@@ -91,6 +120,7 @@ root.geometry("%dx%d+0+0" % (w, h))
 space = (h-4*IMAGE_SIZE)/5
 
 images = [None, None, None, None]
+photo_load_threads = [None, None, None, None]
 
 canvas = Canvas(root, width=w, height=h, bg="Black")
 canvas.pack()
@@ -164,46 +194,21 @@ def take_photo(number):
 		if photo_thread.photo_taken:
 			break
 		time.sleep(0.1)
-	return
-	global canvas
-	global images
-	global space
-	reset_usb()
-	print("This is take_photo() in dummy mode")
-	result = subprocess.Popen("gphoto2 --capture-image-and-download --force-overwrite --filename " + filename_schema.format(number), stdout=subprocess.PIPE, shell=True).stdout.read()
-	print result
-	display_text("Lade Daten...")
-	canvas.pack()
-	image = Image.open(filename_schema.format(number))
-	print "1"
-	image = ImageOps.fit(image, (IMAGE_SIZE, IMAGE_SIZE)) # image.thumbnail((IMAGE_SIZE, IMAGE_SIZE), Image.ANTIALIAS)
-	print "1.1"
-	images[number-1] = ImageTk.PhotoImage(image)
-	print "2"
-	canvas.create_image(space, number*space + (number-1)*IMAGE_SIZE, image=images[number-1], anchor="nw")
-	print "3"
-	canvas.pack()
-	print "4"
 
 def show_overview():
-	global filename_schema, canvas, images, w, h
+	global photo_load_threads, canvas
 	border = 50
 	img_size = (h - 3*50) / 2
-	for i in range(1, 4):
-		img = Image.open(filename_schema.format(i))
-		img = ImageOps.fit(img, (img_size, img_size))
-		images[i-1] = ImageTk.PhotoImage(img)
-		canvas.create_image(i % 2 + 1, (i-1) / 2, image=images[i], anchor="nw")
-	canvas.pack()
+	canvas.delete(ALL)
+	for i in range(4):
+		print "Warte auf Nummer " + str(i)
+		photo_load_threads[i].join()
+		print "Zeige Photo von Nummer " + str(i)
+		photo_load_threads[i].show_photo(canvas)
 
 def advance_line():
 	global line
 	global lines
-	if line+1 == len(lines):
-		global text_offset
-		text_offset = 0
-		global canvas
-		canvas.delete(ALL)
 	if line>=len(lines):
 		line = 0
 		return
@@ -216,6 +221,9 @@ def advance_line():
 		take_photo(current_line[2])
 	elif current_line[1]=="overview":
 		show_overview()
+	elif current_line[1]=="clear":
+		global canvas
+		canvas.delete(ALL)
 	print("Warte: " + str(current_line[0]))
 	if line+1<len(lines):
 		root.after(current_line[0], advance_line)
