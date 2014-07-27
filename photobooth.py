@@ -41,10 +41,11 @@ class PhotoThread(threading.Thread):
 		photo_load_threads[self.number-1].start()
 
 class PhotoLoadThread(threading.Thread):
-	def __init__(self, filename, number):
+	def __init__(self, filename, index):
 		threading.Thread.__init__(self)
 		self.filename = filename
-		self.number = number
+		self.index = index
+		self.image = None
 
 	def run(self):
 		print "PhotoLoadThread " + str(self.index) + " starting..."
@@ -126,7 +127,6 @@ canvas = Canvas(root, width=w, height=h, bg="Black")
 canvas.pack()
 
 text = canvas.create_text(w/2, h/2, text="PhotoBooth v0.1", fill="red", anchor="c")
-text_offset = 0
 
 filename_schema = "photos/this-should-not-happen---{}.jpg"
 
@@ -164,8 +164,6 @@ def start_run():
 	print "h: " + str(h)
 	width = space*2+IMAGE_SIZE
 	print "width: " + str(width)
-	canvas.create_rectangle(0, 0, width, h, fill="White")
-	text_offset = width / 2
 	canvas.pack()
 	line = 0
 	advance_line()
@@ -180,9 +178,8 @@ def reset_usb():
 def display_text(string):
 	global canvas
 	global text
-	global text_offset
 	canvas.delete(text)
-	text = canvas.create_text(w/2+text_offset, h/2, text=string, fill="#45ADA6", anchor="c", font="Lucida 90", justify=CENTER)
+	text = canvas.create_text(w/2, h/2, text=string, fill="#45ADA6", anchor="c", font="Lucida 90", justify=CENTER)
 
 def take_photo(number):
 	global photo_thread
