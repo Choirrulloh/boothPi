@@ -20,47 +20,46 @@ CAMERA_ID = "04a9:3110"
 
 VERSION="0.2"
 
-lines = [
-	[1000, "text", "9"],
-	[1000, "text", "8"],
-	[1000, "text", "7"],
-	[1000, "text", "6"],
-	[1000, "text", "5"],
-	[1000, "text", "4"],
-	[1000, "text", "3"],
-	[1000, "text", "2"],
-	[100, "text", "1"],
-	[1, "photo", 1],
-	[4000, "text", "Sehr schön.\nDas gleiche Spiel nochmal.\nFertig?"],
-	[1000, "text", "7"],
-	[1000, "text", "6"],
-	[1000, "text", "5"],
-	[1000, "text", "4"],
-	[1000, "text", "3"],
-	[1000, "text", "2"],
-	[100, "text", u"Lächeln!"],
-	[1, "photo", 2],
-	[4000, "text", "Jetzt kommt Nummer 3!"],
-	[1000, "text", "7"],
-	[100, "text", "6"],
-	[1, "photo", 3],
-	[4000, "text", "Verarscht. :-P"],
-	[4000, "text", "Jetzt Nummer 4.\nDann habt ihr es\nauch schon hinter euch."],
-	[1000, "text", "7"],
-	[1000, "text", "6"],
-	[1000, "text", "5"],
-	[1000, "text", "4"],
-	[1000, "text", "3"],
-	[1000, "text", "2"],
-	[100, "text", "1"],
-	[1, "photo", 4],
-	[4000, "text", "Das war's auch schon...\n\nBleibt aber mal noch sitzen..."],
-	[4000, "text", "Lasst uns doch mal\neinen Blick auf die\nFotos werfen!"],
-	[25000, "overview"],
-	[1, "clear"],
-	[10000, "text", "Jetzt seid ihr aber fertig.\nViel Spaß noch.\n\n(Ihr dürft mich gerne auch\nnochmal nutzen.) ;-)"],
-	[1, "text", "Hinsetzen,\nAccessoires aussuchen,\nfertig machen\n-\nund dann den großen\nroten Knopf drücken."]
-]
+Script.show_text(             text="Hinsetzen,\nAccessoires aussuchen,\nfertig machen\n-\nund dann den großen\nroten Knopf drücken.")
+Script.wait_for_button_press()
+Script.show_text(             text="9")
+Script.show_text(             text="8")
+Script.show_text(             text="7")
+Script.show_text(             text="6")
+Script.show_text(             text="5")
+Script.show_text(             text="4")
+Script.show_text(             text="3")
+Script.show_text(             text="2")
+Script.show_text(delay=100,   text="1")
+Script.take_photo(1)
+Script.show_text(delay=4000,  text="Sehr schön.\nDas gleiche Spiel nochmal.\nFertig?")
+Script.show_text(             text="7")
+Script.show_text(             text="6")
+Script.show_text(             text="5")
+Script.show_text(             text="4")
+Script.show_text(             text="3")
+Script.show_text(             text="2")
+Script.show_text(delay=100,   text=u"Lächeln!")
+Script.take_photo(2)
+Script.show_text(delay=4000,  text="Jetzt kommt Nummer 3!")
+Script.show_text(             text="7")
+Script.show_text(delay=100,   text="6")
+Script.take_photo(3)
+Script.show_text(delay=4000,  text="Verarscht. :-P")
+Script.show_text(delay=4000,  text="Jetzt Nummer 4.\nDann habt ihr es\nauch schon hinter euch.")
+Script.show_text(             text="7")
+Script.show_text(             text="6")
+Script.show_text(             text="5")
+Script.show_text(             text="4")
+Script.show_text(             text="3")
+Script.show_text(             text="2")
+Script.show_text(delay=100,   text="1")
+Script.take_photo(4)
+Script.show_text(delay=4000,  text="Das war's auch schon...\n\nBleibt aber mal noch sitzen...")
+Script.show_text(delay=4000,  text="Lasst uns doch mal\neinen Blick auf die\nFotos werfen!")
+Script.show_overview(delay=25000)
+Script.clear_screen()
+Script.show_text(delay=10000, text="Jetzt seid ihr aber fertig.\nViel Spaß noch.\n\n(Ihr dürft mich gerne auch\nnochmal nutzen.) ;-)")
 
 
 init()

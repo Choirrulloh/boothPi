@@ -31,8 +31,7 @@ def start_run():
 	width = space*2+IMAGE_SIZE
 	print "width: " + str(width)
 	canvas.pack()
-	line = 0
-	advance_line()
+	Script.next_step()
 
 def reset_usb():
 	global usb_device
@@ -69,38 +68,13 @@ def show_overview():
 		print "Zeige Photo von Nummer " + str(i)
 		photo_load_threads[i].show_photo(canvas)
 
-def advance_line():
-	global line
-	global lines
-	if line>=len(lines):
-		line = 0
-		return
-	current_line = lines[line]
-	if current_line[1]=="text":
-		print("Text: " + current_line[2])
-		display_text(current_line[2])
-	elif current_line[1]=="photo":
-		print("Photo! Nummer " + str(current_line[2]))
-		take_photo(current_line[2])
-	elif current_line[1]=="overview":
-		show_overview()
-	elif current_line[1]=="clear":
-		global canvas
-		canvas.delete(ALL)
-	print("Warte: " + str(current_line[0]))
-	if line+1<len(lines):
-		root.after(current_line[0], advance_line)
-	else:
-		root.after(1000, check_button_pressed)
-	line += 1
-
 def wait_for_button_press():
 	global lines
 	display_text(lines[len(lines)-1][2])
 	root.after(1000, check_button_pressed)
 
 def check_things():
-	global usb_device, lines
+	global usb_device
 
 	# Check the time - if the raspberry has no network connection, it can't get the current
 	# time via NTP and it will use January 1st, 1970. We check for this and quit, if this happens.
@@ -111,18 +85,13 @@ def check_things():
 	# detect_usb will raise an error if there is no camera matching CAMERA_ID found.
 	usb_device = detect_usb()
 
-	# lines[len(lines)-1][1] == "text"
-	if (lines[len(lines)-1][1] != "text"):
-		raise "Last Line of lines (in photobooth.py) has to be of type 'text'. It will be used as stand-by text."
-
 	# usbreset
 	if (!os.path.isfile("usbreset")):
-		raise "'usbreset' not found in the photobooth directory. Compile it by running 'gcc usbreset.c'."
+		raise "'usbreset' not found in the photobooth directory. Compile it by running 'gcc usbreset.c -o usbreset && chmod +x usbreset'."
 
 def init():
-	global line, root, w, h, space, images, photo_load_threads, canvas, text, filename_schema, photo_thread, usb_device
+	global root, w, h, space, images, photo_load_threads, canvas, text, filename_schema, photo_thread, usb_device
 	check_things()
-	line = 0
 
 	root = Tk()
 	w, h = root.winfo_screenwidth(), root.winfo_screenheight()
@@ -147,9 +116,7 @@ def init():
 
 	GPIO.setup(12, GPIO.IN)
 
-	
-
 	root.focus_set()
 	root.bind("<Escape>", quit)
-	root.after(2000, wait_for_button_press)
+	root.after(2000, Script.start)
 	root.mainloop()
