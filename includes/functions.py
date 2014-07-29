@@ -2,16 +2,6 @@ def quit():
 	"""Beendet die App."""
 	root.destroy()
 
-def detect_usb():
-	print "In detect_usb()"
-	result = subprocess.Popen("lsusb", stdout=subprocess.PIPE).stdout.read()
-	match = re.search("Bus (\d{3}) Device (\d{3}): ID " + CAMERA_ID, result)
-	if match != None:
-		result = "/dev/bus/usb/" + match.group(1) + "/" + match.group(2)
-		print "Path to USB device: " + result
-		return result
-	raise "USB Device " + CAMERA_ID + " not found! Check your camera's ID with 'lsusb' and modify CAMERA_ID in photobooth.py."
-
 
 def check_button_pressed():
 	"""This method uses polling to wait for someone to push the button."""
@@ -35,13 +25,6 @@ def start_run():
 	print "width: " + str(width)
 	canvas.pack()
 	Script.next_step()
-
-def reset_usb():
-	global usb_device
-	print "In reset_usb()"
-	cmd = os.path.abspath(os.path.dirname(sys.argv[0])) + "/usbreset " + usb_device
-	print "Executing: " + cmd
-	subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True).stdout.read()
 
 def display_text(string):
 	"""Displays a text on the screen."""
@@ -88,8 +71,8 @@ def check_things():
 		raise "Current time not set. Please execute 'sudo date -s \"20140726 13:14:55\"' and try again."
 
 	# Kamera
-	# detect_usb will raise an error if there is no camera matching CAMERA_ID found.
-	usb_device = detect_usb()
+	# USBDevice.find() will raise an error if there is no camera matching CAMERA_ID found.
+	USBDevice.find()
 
 	# usbreset
 	if (!os.path.isfile("usbreset")):
