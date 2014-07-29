@@ -16,6 +16,12 @@ def clear_screen():
 def wait_for_button_press():
 	lines << [1, "wait", None]
 
+def countdown(start, end, delay=1000):
+	if (end > start):
+		raise "countdown has to go from a large number to a smaller number."
+	for number in range(start, end-1, -1):
+		lines << [delay, "text", str(number)]
+
 def start():
 	line = 0
 	next_step()
@@ -23,11 +29,11 @@ def start():
 def next_step():
 	global root
 
-	if line>=len(lines):
-		line = 0
-		return
 	delay, command, additional = lines[line]
 	line += 1
+	if line>=len(lines):
+		line = 0
+
 	if command=="text":
 		print("Text: " + additional)
 		display_text(additional)
@@ -43,6 +49,10 @@ def next_step():
 		print("Warte auf button_pressed")
 		root.after(1, check_button_pressed)
 		return
+
+	if lines[line][1]=="photo":
+		delay = max(delay - PHOTO_DELAY, 1)
+		
 	print("Warte: " + str(delay))
 
 	root.after(delay, Script.next_step)
