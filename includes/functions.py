@@ -1,4 +1,5 @@
 def quit():
+	"""Beendet die App."""
 	root.destroy()
 
 def detect_usb():
@@ -13,6 +14,7 @@ def detect_usb():
 
 
 def check_button_pressed():
+	"""This method uses polling to wait for someone to push the button."""
 	global root
 	button_pressed = GPIO.input(12)
 	if button_pressed:
@@ -21,6 +23,7 @@ def check_button_pressed():
 		root.after(5, check_button_pressed)
 
 def start_run():
+	"""Starts a new run. Is called whenever someone pushes the button (when the script is waiting for it, of course)."""
 	global filename_schema
 	global canvas
 	global h, space
@@ -41,12 +44,14 @@ def reset_usb():
 	subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True).stdout.read()
 
 def display_text(string):
+	"""Displays a text on the screen."""
 	global canvas
 	global text
 	canvas.delete(text)
 	text = canvas.create_text(w/2, h/2, text=string, fill="#45ADA6", anchor="c", font="Lucida 90", justify=CENTER)
 
 def take_photo(number):
+	"""Tells PhotoThread to take a photo and waits for it to return."""
 	global photo_thread
 	global filename_schema
 	photo_thread.set_data(filename_schema.format(number), number)
@@ -58,6 +63,7 @@ def take_photo(number):
 		time.sleep(0.1)
 
 def show_overview():
+	"""Displays the 4 pictures on the screen. Uses PhotoLoadThreads and still is pretty slow..."""
 	global photo_load_threads, canvas
 	border = 50
 	img_size = (h - 3*50) / 2
@@ -74,7 +80,7 @@ def wait_for_button_press():
 	root.after(1000, check_button_pressed)
 
 def check_things():
-	global usb_device
+	"""Checks for various prerequisites to be fulfilled."""
 
 	# Check the time - if the raspberry has no network connection, it can't get the current
 	# time via NTP and it will use January 1st, 1970. We check for this and quit, if this happens.
@@ -90,6 +96,7 @@ def check_things():
 		raise "'usbreset' not found in the photobooth directory. Compile it by running 'gcc usbreset.c -o usbreset && chmod +x usbreset'."
 
 def init():
+	"""Initializes the photo booth."""
 	global root, w, h, space, images, photo_load_threads, canvas, text, filename_schema, photo_thread, usb_device
 	check_things()
 
