@@ -21,7 +21,7 @@ CAMERA_ID = "04a9:3110"
 # Time this specific camera needs between telling it to take a photo and it actually taking a photo.
 PHOTO_DELAY=900
 
-VERSION="0.2"
+VERSION="2"
 
 Script.show_text(             text="Hinsetzen,\nAccessoires aussuchen,\nfertig machen\n-\nund dann den großen\nroten Knopf drücken.")
 Script.wait_for_button_press()
