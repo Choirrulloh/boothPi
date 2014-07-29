@@ -2,3 +2,4 @@ photos/*
 usbreset
 *.swp
 test.py
+*.pyc
