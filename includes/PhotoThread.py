@@ -10,7 +10,7 @@ class PhotoThread(threading.Thread):
 	def run(self):
 		self.photo_taken = False
 		# Take the photo
-		reset_usb()
+		USBDevice.reset()
 		print("This is take_photo().")
 		process = subprocess.Popen("gphoto2 --capture-image-and-download --force-overwrite --filename " + self.filename, stdout=subprocess.PIPE, shell=True)
 		while True:

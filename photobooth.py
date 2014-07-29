@@ -8,6 +8,7 @@ import re
 import Image, ImageTk, ImageOps
 import RPi.GPIO as GPIO
 import os, os.path, sys
+from distutils import spawn
 from includes import PhotoThread, PhotoLoadThread, USBDevice
 from includes.functions import *
 
