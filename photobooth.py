@@ -8,8 +8,7 @@ import re
 import Image, ImageTk, ImageOps
 import RPi.GPIO as GPIO
 import os, os.path, sys
-from includes.PhotoThread import PhotoThread
-from includes.PhotoLoadThread import PhotoLoadThread
+from includes import PhotoThread, PhotoLoadThread, USBDevice
 from includes.functions import *
 
 # Size the thumbnails will be shown on screen.

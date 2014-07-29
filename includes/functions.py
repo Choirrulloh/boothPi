@@ -16,11 +16,8 @@ def start_run():
 	"""Starts a new run. Is called whenever someone pushes the button (when the script is waiting for it, of course)."""
 	global filename_schema
 	global canvas
-	global h, space
-	global line
-	global text_offset
+	global width, space
 	filename_schema = time.strftime("photos/%Y%m%d-%H%M%S---{}.jpg")
-	print "h: " + str(h)
 	width = space*2+IMAGE_SIZE
 	print "width: " + str(width)
 	canvas.pack()
@@ -56,11 +53,6 @@ def show_overview():
 		photo_load_threads[i].join()
 		print "Zeige Photo von Nummer " + str(i)
 		photo_load_threads[i].show_photo(canvas)
-
-def wait_for_button_press():
-	global lines
-	display_text(lines[len(lines)-1][2])
-	root.after(1000, check_button_pressed)
 
 def check_things():
 	"""Checks for various prerequisites to be fulfilled."""
