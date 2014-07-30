@@ -18,7 +18,9 @@ IMAGE_SIZE = 500
 # This script will look for a camera with the following USB-ID. Check yours with 'lsusb'.
 CAMERA_ID = "04a9:3110"
 
-# Time this specific camera needs between telling it to take a photo and it actually taking a photo.
+# Time (in ms) this specific camera needs between telling it to take a photo and it actually taking a photo.
+# It's best to determine this by try-and-error...
+# 900ms is the correct value for an EOS 400D in manual mode.
 PHOTO_DELAY=900
 
 VERSION="2"

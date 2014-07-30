@@ -67,11 +67,11 @@ def check_things():
 	USBDevice.find()
 
 	# usbreset
-	if (!os.path.isfile("usbreset")):
+	if (not os.path.isfile("usbreset")):
 		raise "'usbreset' not found in the photobooth directory. Compile it by running 'gcc usbreset.c -o usbreset && chmod +x usbreset'."
 
 	# gphoto2
-	if (!spawn.find_executable("gphoto2")):
+	if (not spawn.find_executable("gphoto2")):
 		raise "gphoto2 does not seem to be installed... Try 'sudo apt-get install gphoto2' and try again."
 
 def init():
