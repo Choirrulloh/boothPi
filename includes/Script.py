@@ -1,26 +1,28 @@
+import Settings
+
 lines = []
 line = 0
 
 def show_text(text, delay=1000):
-	lines << [delay, "text", additional]
+	lines.append([delay, "text", text])
 
 def take_photo(index):
-	lines << [1, "photo", index]
+	lines.append([1, "photo", index])
 
 def show_overview(delay):
-	lines << [delay, "overview", None]
+	lines.append([delay, "overview", None])
 
 def clear_screen():
-	lines << [1, "clear", None]
+	lines.append([1, "clear", None])
 
 def wait_for_button_press():
-	lines << [1, "wait", None]
+	lines.append([1, "wait", None])
 
 def countdown(start, end, delay=1000):
 	if (end > start):
 		raise "countdown has to go from a large number to a smaller number."
 	for number in range(start, end-1, -1):
-		lines << [delay, "text", str(number)]
+		lines.append([delay, "text", str(number)])
 
 def start():
 	line = 0
@@ -51,7 +53,7 @@ def next_step():
 		return
 
 	if lines[line][1]=="photo":
-		delay = max(delay - PHOTO_DELAY, 1)
+		delay = max(delay - Settings.PHOTO_DELAY, 1)
 		
 	print("Warte: " + str(delay))
 

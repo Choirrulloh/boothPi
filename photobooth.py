@@ -1,6 +1,22 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from includes import Settings
+
+# Size the thumbnails will be shown on screen.
+Settings.IMAGE_SIZE = 500
+
+# This script will look for a camera with the following USB-ID. Check yours with 'lsusb'.
+Settings.CAMERA_ID = "04a9:3110"
+
+# Time (in ms) this specific camera needs between telling it to take a photo and it actually taking a photo.
+# It's best to determine this by try-and-error...
+# 900ms is the correct value for an EOS 400D in manual mode.
+Settings.PHOTO_DELAY=900
+
+Settings.VERSION="2"
+
+
 from Tkinter import *
 import time
 import subprocess, threading
@@ -9,21 +25,9 @@ import Image, ImageTk, ImageOps
 import RPi.GPIO as GPIO
 import os, os.path, sys
 from distutils import spawn
-from includes import PhotoThread, PhotoLoadThread, USBDevice
+from includes import PhotoThread, PhotoLoadThread, USBDevice, Script
 from includes.functions import *
 
-# Size the thumbnails will be shown on screen.
-IMAGE_SIZE = 500
-
-# This script will look for a camera with the following USB-ID. Check yours with 'lsusb'.
-CAMERA_ID = "04a9:3110"
-
-# Time (in ms) this specific camera needs between telling it to take a photo and it actually taking a photo.
-# It's best to determine this by try-and-error...
-# 900ms is the correct value for an EOS 400D in manual mode.
-PHOTO_DELAY=900
-
-VERSION="2"
 
 Script.show_text(             text="Hinsetzen,\nAccessoires aussuchen,\nfertig machen\n-\nund dann den großen\nroten Knopf drücken.")
 Script.wait_for_button_press()

@@ -1,6 +1,8 @@
-class PhotoThread(threading.Thread):
+from threading import Thread
+
+class PhotoThread(Thread):
 	def __init__(self):
-		threading.Thread.__init__(self)
+		Thread.__init__(self)
 		self.photo_taken = False
 
 	def set_data(self, filename, number):

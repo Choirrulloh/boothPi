@@ -1,6 +1,9 @@
-class PhotoLoadThread(threading.Thread):
+from threading import Thread
+import Settings
+
+class PhotoLoadThread(Thread):
 	def __init__(self, filename, index):
-		threading.Thread.__init__(self)
+		Thread.__init__(self)
 		self.filename = filename
 		self.index = index
 		self.image = None
@@ -12,13 +15,13 @@ class PhotoLoadThread(threading.Thread):
 		print "PhotoLoadThread " + str(self.index) + ": Opening..."
 		self.image = Image.open(self.filename)
 		print "PhotoLoadThread " + str(self.index) + ": Fitting..."
-		self.image = ImageOps.fit(self.image, (IMAGE_SIZE, IMAGE_SIZE))
+		self.image = ImageOps.fit(self.image, (Settings.IMAGE_SIZE, Settings.IMAGE_SIZE))
 		print "PhotoLoadThread " + str(self.index) + ": TKing..."
 		images[self.index] = ImageTk.PhotoImage(self.image)
 		print "PhotoLoadThread " + str(self.index) + " finished."
 
 	def show_photo(self, canvas):
-		global w, h, IMAGE_SIZE
+		global w, h
 		x = 0
 		y = 0
 		anchor = ""

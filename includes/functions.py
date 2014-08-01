@@ -1,3 +1,7 @@
+import time
+import USBDevice
+import Settings
+
 def quit():
 	"""Beendet die App."""
 	root.destroy()
@@ -18,7 +22,7 @@ def start_run():
 	global canvas
 	global width, space
 	filename_schema = time.strftime("photos/%Y%m%d-%H%M%S---{}.jpg")
-	width = space*2+IMAGE_SIZE
+	width = space*2+Settings.IMAGE_SIZE
 	print "width: " + str(width)
 	canvas.pack()
 	Script.next_step()
@@ -86,7 +90,7 @@ def init():
 	root.focus()
 	root.geometry("%dx%d+0+0" % (w, h))
 
-	space = (h-4*IMAGE_SIZE)/5
+	space = (h-4*Settings.IMAGE_SIZE)/5
 
 	images = [None, None, None, None]
 	photo_load_threads = [None, None, None, None]
@@ -94,7 +98,7 @@ def init():
 	canvas = Canvas(root, width=w, height=h, bg="Black")
 	canvas.pack()
 
-	text = canvas.create_text(w/2, h/2, text="PhotoBooth v"+VERSION, fill="red", anchor="c")
+	text = canvas.create_text(w/2, h/2, text="PhotoBooth v"+Settings.VERSION, fill="red", anchor="c")
 
 	filename_schema = "photos/this-should-not-happen---{}.jpg"
 
