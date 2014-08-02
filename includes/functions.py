@@ -2,16 +2,23 @@ import time
 import USBDevice
 import Settings
 
-def quit():
+override_button_pressed = False
+
+def quit(some_var):
 	"""Beendet die App."""
+	global root
 	root.destroy()
 
+def override_button_press(some_var): 
+	global override_button_pressed
+	override_button_pressed = True
 
-def check_button_pressed():
+def check_button_pressed(first_run=False):
 	"""This method uses polling to wait for someone to push the button."""
-	global root
+	global root, override_button_pressed
+	if first_run: override_button_pressed = False
 	button_pressed = GPIO.input(12)
-	if button_pressed:
+	if button_pressed or override_button_pressed:
 		start_run()
 	else:
 		root.after(5, check_button_pressed)
@@ -85,9 +92,9 @@ def init():
 
 	root = Tk()
 	w, h = root.winfo_screenwidth(), root.winfo_screenheight()
-	root.overrideredirect(1)
 	root.wm_attributes("-topmost", 1)
 	root.focus()
+	root.focus_force()
 	root.geometry("%dx%d+0+0" % (w, h))
 
 	space = (h-4*Settings.IMAGE_SIZE)/5
@@ -102,11 +109,13 @@ def init():
 
 	filename_schema = "photos/this-should-not-happen---{}.jpg"
 
-	photo_thread = PhotoThread()
+	photo_thread = PhotoThread(w, h)
 
 	GPIO.setup(12, GPIO.IN)
 
 	root.focus_set()
-	root.bind("<Escape>", quit)
-	root.after(2000, Script.start)
+	root.focus_force()
+	root.bind("<Q>", quit)
+	root.bind("<space>", override_button_press)
+	root.after(2000, lambda: Script.start())
 	root.mainloop()
