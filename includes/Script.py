@@ -1,4 +1,5 @@
-import Settings
+import Settings, Output
+from functions import *
 
 lines = []
 line = 0
@@ -29,7 +30,7 @@ def start():
 	next_step()
 
 def next_step():
-	global root
+	global line
 
 	delay, command, additional = lines[line]
 	line += 1
@@ -41,15 +42,14 @@ def next_step():
 		display_text(additional)
 	elif command=="photo":
 		print("Photo! Nummer " + str(additional))
-		take_photo(additional)
+		call_photo_thread(additional)
 	elif command=="overview":
-		show_overview()
+		do_show_overview()
 	elif command=="clear":
-		global canvas
-		canvas.delete(ALL)
+		do_clear_screen()
 	elif command=="wait":
 		print("Warte auf button_pressed")
-		root.after(1, check_button_pressed)
+		root().after(1, lambda: check_button_pressed(first_run=True))
 		return
 
 	if lines[line][1]=="photo":
@@ -57,4 +57,4 @@ def next_step():
 		
 	print("Warte: " + str(delay))
 
-	root.after(delay, Script.next_step)
+	root().after(delay, Script.next_step)

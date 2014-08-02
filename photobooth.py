@@ -16,15 +16,12 @@ Settings.PHOTO_DELAY=900
 
 Settings.VERSION="2"
 
+Settings.SIMULATE_USB_DEVICE = True
+Settings.DEBUG = True
+
 
 from Tkinter import *
-import time
-import subprocess, threading
-import re
-import Image, ImageTk, ImageOps
 import RPi.GPIO as GPIO
-import os, os.path, sys
-from distutils import spawn
 from includes import PhotoThread, PhotoLoadThread, USBDevice, Script
 from includes.functions import *
 

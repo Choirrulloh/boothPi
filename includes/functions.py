@@ -1,6 +1,9 @@
-import time
-import USBDevice
-import Settings
+import time, os.path
+from distutils import spawn
+from Tkinter import *
+from RPi import GPIO
+import USBDevice, Settings, Script, Output
+from PhotoThread import *
 
 override_button_pressed = False
 
@@ -41,10 +44,16 @@ def display_text(string):
 	canvas.delete(text)
 	text = canvas.create_text(w/2, h/2, text=string, fill="#45ADA6", anchor="c", font="Lucida 90", justify=CENTER)
 
-def take_photo(number):
+def do_clear_screen():
+	global canvas
+	canvas.delete(ALL)
+
+def call_photo_thread(number):
 	"""Tells PhotoThread to take a photo and waits for it to return."""
+	Output.debug("This is call_photo_thread().")
 	global photo_thread
 	global filename_schema
+	Output.debug("photo_thread: " + str(photo_thread))
 	photo_thread.set_data(filename_schema.format(number), number)
 	photo_thread.run()
 	while True:
@@ -53,17 +62,17 @@ def take_photo(number):
 			break
 		time.sleep(0.1)
 
-def show_overview():
+def do_show_overview():
 	"""Displays the 4 pictures on the screen. Uses PhotoLoadThreads and still is pretty slow..."""
-	global photo_load_threads, canvas
+	global canvas
 	border = 50
 	img_size = (h - 3*50) / 2
 	canvas.delete(ALL)
 	for i in range(4):
 		print "Warte auf Nummer " + str(i)
-		photo_load_threads[i].join()
+		photo_load_threads()[i].join()
 		print "Zeige Photo von Nummer " + str(i)
-		photo_load_threads[i].show_photo(canvas)
+		photo_load_threads()[i].show_photo(canvas)
 
 def check_things():
 	"""Checks for various prerequisites to be fulfilled."""
@@ -85,9 +94,11 @@ def check_things():
 	if (not spawn.find_executable("gphoto2")):
 		raise "gphoto2 does not seem to be installed... Try 'sudo apt-get install gphoto2' and try again."
 
+def root(): return root
+
 def init():
 	"""Initializes the photo booth."""
-	global root, w, h, space, images, photo_load_threads, canvas, text, filename_schema, photo_thread, usb_device
+	global root, w, h, space, canvas, text, filename_schema, photo_thread, usb_device
 	check_things()
 
 	root = Tk()
@@ -98,9 +109,6 @@ def init():
 	root.geometry("%dx%d+0+0" % (w, h))
 
 	space = (h-4*Settings.IMAGE_SIZE)/5
-
-	images = [None, None, None, None]
-	photo_load_threads = [None, None, None, None]
 
 	canvas = Canvas(root, width=w, height=h, bg="Black")
 	canvas.pack()
