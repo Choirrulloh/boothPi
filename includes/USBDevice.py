@@ -5,20 +5,22 @@ import Output
 __path = None
 
 def find():
-	"""Returns the USB port address of the USB device given in CAMERA_ID."""
+	"""Returns the USB port address of the camera."""
 	global __path
 	print "In USBDevice.find()"
 	if Settings.SIMULATE_USB_DEVICE:
-		__path = "/dev/bus/usb/42/23"
+		__path = "/dev/bus/usb/042/023"
 		Output.debug("Simulation! Pretending the device is " + __path + ".")
 		return __path
-	result = subprocess.Popen("lsusb", stdout=subprocess.PIPE).stdout.read()
-	match = re.search("Bus (\d{3}) Device (\d{3}): ID " + Settings.CAMERA_ID, result)
+	result = subprocess.Popen("gphoto2 --auto-detect", stdout=subprocess.PIPE, shell=True).stdout.read()
+	Output.debug("Result of `gphoto2 --auto-detect`: " + result)
+	match = re.compile("(?P<camera>[^\n]+?) +usb:(?P<device>[0-9]{3}),(?P<port>[0-9]{3})",re.MULTILINE).search(result)
 	if match != None:
-		__path = "/dev/bus/usb/" + match.group(1) + "/" + match.group(2)
-		print "Path to USB device: " + __path
+		Output.notice("Found camera: " + match.group('camera') + " on USB port " + match.group('device') + "," + match.group('port'))
+		__path = "/dev/bus/usb/" + match.group('device') + "/" + match.group('port')
+		Output.notice("Path is now: " + __path)
 		return __path
-	raise "USB Device " + Settings.CAMERA_ID + " not found! Check your camera's ID with 'lsusb' and modify CAMERA_ID in photobooth.py."
+	raise "Camera not found. Connect it to the Pi, switch it on and verify that `gphoto2 --auto-detect` finds it."
 
 def get_path():
 	if __path:
