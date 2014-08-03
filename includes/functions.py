@@ -43,6 +43,7 @@ def display_text(string):
 	global text
 	canvas.delete(text)
 	text = canvas.create_text(w/2, h/2, text=string, fill="#45ADA6", anchor="c", font="Lucida 90", justify=CENTER)
+	Output.debug("Text: " + string.replace("\n", "\\n"))
 
 def do_clear_screen():
 	global canvas

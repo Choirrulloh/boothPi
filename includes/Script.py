@@ -38,7 +38,6 @@ def next_step():
 		line = 0
 
 	if command=="text":
-		print("Text: " + additional)
 		display_text(additional)
 	elif command=="photo":
 		print("Photo! Nummer " + str(additional))
