@@ -13,7 +13,7 @@ Settings.PHOTO_DELAY=900
 
 Settings.VERSION="2"
 
-Settings.SIMULATE_USB_DEVICE = True
+Settings.SIMULATE_USB_DEVICE = False
 Settings.DEBUG = True
 
 
