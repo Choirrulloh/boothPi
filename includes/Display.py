@@ -25,6 +25,10 @@ def display_debug(string):
 			__canvas.delete(__debug)
 		__debug = __canvas.create_text(0, 0, text=string, fill="#aaaaaa", font="Lucida 12", anchor="nw")
 
+def remove_debug_text():
+	if __canvas and __debug:
+		__canvas.delete(__debug)
+
 def clear():
 	global __canvas
 	__canvas.delete(ALL)
@@ -40,6 +44,11 @@ def show_overview():
 		PhotoThread.photo_load_threads()[i].show_photo(__canvas, __w, __h)
 
 def root(): return __root
+
+def toggle_debug_mode(event):
+	Settings.DEBUG = not Settings.DEBUG
+	if not Settings.DEBUG:
+		remove_debug_text()
 
 def init(function_to_start_with):
 	"""Initializes the display."""
@@ -63,5 +72,6 @@ def init(function_to_start_with):
 	__root.focus_force()
 	__root.bind("<Q>", quit)
 	__root.bind("<space>", functions.override_button_press)
+	__root.bind("<D>", toggle_debug_mode)
 	__root.after(2000, function_to_start_with)
 	__root.mainloop()
