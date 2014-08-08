@@ -1,5 +1,5 @@
 from threading import Thread
-import Settings
+import Settings, Output
 import Image, ImageTk, ImageOps
 
 __images = [None, None, None, None]

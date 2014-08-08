@@ -71,7 +71,7 @@ def init(function_to_start_with):
 	__root.focus_set()
 	__root.focus_force()
 	__root.bind("<Q>", quit)
-	__root.bind("<space>", functions.override_button_press)
 	__root.bind("<D>", toggle_debug_mode)
+	__root.bind("<Key>", functions.override_button_press)
 	__root.after(2000, function_to_start_with)
 	__root.mainloop()
