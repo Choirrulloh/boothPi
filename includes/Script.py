@@ -39,14 +39,14 @@ def next_step():
 	if command=="text":
 		Display.display_text(additional)
 	elif command=="photo":
-		print("Photo! Nummer " + str(additional))
+		Output.debug("Photo! Number " + str(additional))
 		functions.call_photo_thread(additional)
 	elif command=="overview":
 		Display.show_overview()
 	elif command=="clear":
 		Display.clear()
 	elif command=="wait":
-		print("Warte auf button_pressed")
+		Output.debug("Calling check_button_pressed...")
 		functions.check_button_pressed(first_run=True)
 		return
 
@@ -56,6 +56,6 @@ def next_step():
 	if Settings.DEBUG_SHORT_DELAYS:
 		delay = delay / 100 + 1
 		
-	print("Warte: " + str(delay))
+	Output.debug("Waiting: " + str(delay))
 
 	Display.root().after(delay, next_step)

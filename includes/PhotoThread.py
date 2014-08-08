@@ -20,7 +20,7 @@ class PhotoThread(Thread):
 		self.number = number
 	
 	def run(self):
-		print("This is PhotoThread.run().")
+		Output.debug("This is PhotoThread.run().")
 		self.photo_taken = False
 		# Take the photo
 		USBDevice.reset()

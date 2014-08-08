@@ -14,15 +14,15 @@ class PhotoLoadThread(Thread):
 		self.image = None
 
 	def run(self):
-		print "PhotoLoadThread " + str(self.index) + " starting..."
+		Output.debug("PhotoLoadThread " + str(self.index) + " starting...")
 		# Load the photo
-		print "PhotoLoadThread " + str(self.index) + ": Opening..."
+		Output.debug("PhotoLoadThread " + str(self.index) + ": Opening...")
 		self.image = Image.open(self.filename)
-		print "PhotoLoadThread " + str(self.index) + ": Fitting..."
+		Output.debug("PhotoLoadThread " + str(self.index) + ": Fitting...")
 		self.image = ImageOps.fit(self.image, (Settings.IMAGE_SIZE, Settings.IMAGE_SIZE))
-		print "PhotoLoadThread " + str(self.index) + ": TKing..."
+		Output.debug("PhotoLoadThread " + str(self.index) + ": TKing...")
 		images()[self.index] = ImageTk.PhotoImage(self.image)
-		print "PhotoLoadThread " + str(self.index) + " finished."
+		Output.debug("PhotoLoadThread " + str(self.index) + " finished.")
 
 	def show_photo(self, canvas, w, h):
 		x = 0

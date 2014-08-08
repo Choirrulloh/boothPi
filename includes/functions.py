@@ -43,7 +43,7 @@ def call_photo_thread(number):
 	photo_thread.set_data(filename_schema.format(number), number)
 	photo_thread.run()
 	while True:
-		print "Warte auf photo_taken..."
+		Output.debug("Warte auf photo_taken...")
 		if photo_thread.photo_taken:
 			break
 		time.sleep(0.1)

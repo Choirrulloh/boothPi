@@ -7,7 +7,7 @@ __path = None
 def find():
 	"""Returns the USB port address of the camera."""
 	global __path
-	print "In USBDevice.find()"
+	Output.debug("In USBDevice.find()")
 	if Settings.SIMULATE_USB_DEVICE:
 		__path = "/dev/bus/usb/042/023"
 		Output.debug("Simulation! Pretending the device is " + __path + ".")
@@ -30,10 +30,10 @@ def get_path():
 
 def reset():
 	"""Calls usbreset to reset the USB port."""
-	print "In USBDevice.reset()"
+	Output.debug("In USBDevice.reset()")
 	if Settings.SIMULATE_USB_DEVICE:
 		Output.debug("Simulation. Resetting nothing.")
 		return
 	cmd = os.path.abspath(os.path.dirname(sys.argv[0])) + "/usbreset " + get_path()
-	print "Executing: " + cmd
+	Output.debug("Executing: " + cmd)
 	subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True).stdout.read()
