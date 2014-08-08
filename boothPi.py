@@ -15,6 +15,7 @@ Settings.VERSION="2"
 
 Settings.SIMULATE_USB_DEVICE = False
 Settings.DEBUG = False
+Settings.DEBUG_SHORT_DELAYS = False
 
 
 from Tkinter import *
@@ -29,7 +30,7 @@ Script.countdown(             start=10, end=1)
 Script.take_photo(1)
 Script.show_text(delay=4000,  text="Sehr schön.\nDas gleiche Spiel nochmal.\nFertig?")
 Script.countdown(             start=7, end=2)
-Script.show_text(             text=u"Lächeln!")
+Script.show_text(             text="Lächeln!")
 Script.take_photo(2)
 Script.show_text(delay=4000,  text="Jetzt kommt Nummer 3!")
 Script.countdown(             start=7, end=6)

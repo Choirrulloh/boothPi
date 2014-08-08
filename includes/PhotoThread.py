@@ -1,5 +1,5 @@
 from threading import Thread
-import time
+import time, subprocess
 import Output, USBDevice, Settings
 from PhotoLoadThread import PhotoLoadThread
 
@@ -8,10 +8,9 @@ __photo_load_thread_array = [None, None, None, None]
 def photo_load_threads(): return __photo_load_thread_array
 
 class PhotoThread(Thread):
-	def __init__(self, w, h):
+	def __init__(self):
 		Thread.__init__(self)
 		self.photo_taken = False
-		self.w, self.h = w, h
 
 	def set_data(self, filename, number):
 		Output.debug("This is PhotoThread.set_data().")
@@ -41,5 +40,5 @@ class PhotoThread(Thread):
 				if line.startswith("New file is in"):
 					self.photo_taken = True
 
-		photo_load_threads()[self.number-1] = PhotoLoadThread(self.filename, self.number-1, self.w, self.h)
+		photo_load_threads()[self.number-1] = PhotoLoadThread(self.filename, self.number-1)
 		photo_load_threads()[self.number-1].start()

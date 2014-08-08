@@ -7,13 +7,11 @@ __images = [None, None, None, None]
 def images(): return __images
 
 class PhotoLoadThread(Thread):
-	def __init__(self, filename, index, w, h):
+	def __init__(self, filename, index):
 		Thread.__init__(self)
 		self.filename = filename
 		self.index = index
 		self.image = None
-		self.w = w
-		self.h = h
 
 	def run(self):
 		print "PhotoLoadThread " + str(self.index) + " starting..."
@@ -26,24 +24,24 @@ class PhotoLoadThread(Thread):
 		images()[self.index] = ImageTk.PhotoImage(self.image)
 		print "PhotoLoadThread " + str(self.index) + " finished."
 
-	def show_photo(self, canvas):
+	def show_photo(self, canvas, w, h):
 		x = 0
 		y = 0
 		anchor = ""
 
 		if (self.index / 2 == 0):
 			anchor = "s"
-			y = self.h/2 - 25
+			y = h/2 - 25
 		else:
 			anchor = "n"
-			y = self.h/2 + 25
+			y = h/2 + 25
 
 		if (self.index % 2 == 0):
 			anchor += "e"
-			x = self.w/2 - 25
+			x = w/2 - 25
 		else:
 			anchor += "w"
-			x = self.w/2 + 25
+			x = w/2 + 25
 
 		canvas.create_image(x, y, image=images()[self.index], anchor=anchor)
 		canvas.pack()

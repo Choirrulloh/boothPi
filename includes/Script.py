@@ -1,5 +1,4 @@
-import Settings, Output
-from functions import *
+import Settings, Output, Display, functions
 
 lines = []
 line = 0
@@ -38,22 +37,25 @@ def next_step():
 		line = 0
 
 	if command=="text":
-		display_text(additional)
+		Display.display_text(additional)
 	elif command=="photo":
 		print("Photo! Nummer " + str(additional))
-		call_photo_thread(additional)
+		functions.call_photo_thread(additional)
 	elif command=="overview":
-		do_show_overview()
+		Display.show_overview()
 	elif command=="clear":
-		do_clear_screen()
+		Display.clear()
 	elif command=="wait":
 		print("Warte auf button_pressed")
-		root().after(1, lambda: check_button_pressed(first_run=True))
+		functions.check_button_pressed(first_run=True)
 		return
 
 	if lines[line][1]=="photo":
 		delay = max(delay - Settings.PHOTO_DELAY, 1)
+
+	if Settings.DEBUG_SHORT_DELAYS:
+		delay = delay / 100 + 1
 		
 	print("Warte: " + str(delay))
 
-	root().after(delay, Script.next_step)
+	Display.root().after(delay, next_step)
