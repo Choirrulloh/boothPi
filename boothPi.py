@@ -3,13 +3,12 @@
 
 from includes import Settings
 
-# Size the thumbnails will be shown on screen.
-Settings.IMAGE_SIZE = 500
-
 # Time (in ms) this specific camera needs between telling it to take a photo and it actually taking a photo.
 # It's best to determine this by try-and-error...
 # 900ms is the correct value for an EOS 400D in manual mode.
 Settings.PHOTO_DELAY=900
+
+Settings.PADDING = 20
 
 Settings.VERSION="2"
 

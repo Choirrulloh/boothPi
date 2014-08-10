@@ -3,12 +3,14 @@ import Settings, Output, functions, PhotoThread
 
 __root = None
 __canvas = __debug = None
-__w = __h = 0
+__w = __h = __image_size = 0
 
 def quit(some_var):
 	"""Beendet die App."""
 	global __root
 	__root.destroy()
+
+def image_size(): return __image_size
 
 def display_text(string):
 	"""Displays a text on the screen."""
@@ -35,13 +37,28 @@ def clear():
 
 def show_overview():
 	"""Displays the 4 pictures on the screen. Uses PhotoLoadThreads and still is pretty slow..."""
-	global __canvas
+	global __canvas, __image_size
 	__canvas.delete(ALL)
+	Output.debug("image_size is " + str(__image_size))
 	for i in range(4):
+		plt = PhotoThread.photo_load_threads()[i]
+		if i==0 or i==1:
+			y = __h/2 - Settings.PADDING/2
+			anchor = "s"
+		if i==2 or i==3:
+			y = __h/2 + Settings.PADDING/2
+			anchor = "n"
+		if i==0 or i==2:
+			x = __w/2 - Settings.PADDING/2
+			anchor = anchor + "e"
+		if i==1 or i==3:
+			x = __w/2 + Settings.PADDING/2
+			anchor = anchor + "w"
 		Output.debug("Warte auf Nummer " + str(i))
-		PhotoThread.photo_load_threads()[i].join()
+		plt.join()
 		Output.debug("Zeige Photo von Nummer " + str(i))
-		PhotoThread.photo_load_threads()[i].show_photo(__canvas, __w, __h)
+		__canvas.create_image(x, y, image=plt.get_photo(), anchor=anchor)
+                __canvas.pack()
 
 def root(): return __root
 
@@ -52,7 +69,7 @@ def toggle_debug_mode(event):
 
 def init(function_to_start_with):
 	"""Initializes the display."""
-	global __root, __w, __h, space, __canvas, __text, filename_schema, photo_thread, usb_device
+	global __root, __w, __h, space, __canvas, __text, __image_size
 
 	__root = Tk()
 	__w, __h = __root.winfo_screenwidth(), __root.winfo_screenheight()
@@ -61,7 +78,7 @@ def init(function_to_start_with):
 	__root.focus_force()
 	__root.geometry("%dx%d+0+0" % (__w, __h))
 
-	space = (__h-4*Settings.IMAGE_SIZE)/5
+	__image_size = (min(__w, __h)-Settings.PADDING)/2
 
 	__canvas = Canvas(__root, width=__w, height=__h, bg="Black")
 	__canvas.pack()
