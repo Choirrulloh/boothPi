@@ -78,7 +78,7 @@ def init():
 	filename_schema = "photos/this-should-not-happen---{}.jpg"
 
 	photo_thread = PhotoThread.PhotoThread()
-
+	GPIO.setmode(GPIO.BOARD)
 	GPIO.setup(12, GPIO.IN)
 
 	Display.init(lambda: Script.start())
