@@ -11,7 +11,8 @@ Settings.PHOTO_DELAY=900
 # How much space to leave between the photos when displaying them on screen.
 Settings.PADDING = 20
 
-Settings.VERSION="2"
+# Version of this app.
+Settings.VERSION="3"
 
 # Which GPIO pin is used for the button.
 Settings.GPIO = 12
