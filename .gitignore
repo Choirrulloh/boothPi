@@ -3,3 +3,5 @@ usbreset
 *.swp
 test.py
 *.pyc
+*.*~
+includes/demo_*.jpg
