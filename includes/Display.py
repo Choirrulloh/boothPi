@@ -45,6 +45,20 @@ def display_stats(some_var):
         __canvas.create_text(0, 0, text=text, anchor="nw", font="Lucida 30", fill="white")
         Settings.ON_BUTTON_PRESS = Settings.main_script.start
         Settings.WAIT_FOR_BUTTON_PRESS = True
+        
+def display_help(some_var):
+        clear()
+        text = "Shift-Q: Quit this app.\n"
+        text+= "Shift-S: Show some stats.\n"
+        text+= "Shift-P: Make and display a single photo.\n"
+        text+= "Shift-D: Toggle debug mode.\n"
+        text+= "\n"
+        text+= "Control-Shift-Alt-Q: Shutdown.\n"
+        text+= "\n"
+        text+= "Press any key to continue."
+        __canvas.create_text(0, 0, text=text, anchor="nw", font="Lucida 30", fill="white")
+        Settings.ON_BUTTON_PRESS = Settings.main_script.start
+        Settings.WAIT_FOR_BUTTON_PRESS = True
 
 def remove_debug_text():
 	if __canvas and __debug:
