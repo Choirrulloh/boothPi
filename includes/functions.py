@@ -78,12 +78,7 @@ def call_photo_thread(number, is_temp_photo=False):
 def check_things():
 	"""Checks for various prerequisites to be fulfilled."""
 
-	# Check the time - if the raspberry has no network connection, it can't get the current
-	# time via NTP and it will use January 1st, 1970. We check for this and quit, if this happens.
-	if (time.strftime("%Y") == "1970"):
-		raise "Current time not set. Please execute 'sudo date -s \"20140726 13:14:55\"' and try again."
-
-	# Kamera
+	# Camera
 	# USBDevice.find() will raise an error if there is no camera matching CAMERA_ID found.
 	USBDevice.find()
 

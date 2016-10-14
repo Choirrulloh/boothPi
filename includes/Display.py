@@ -25,7 +25,6 @@ def display_text(string):
 def display_debug(string):
 	"""Displays debug strings on screen."""
 	global __debug
-	print threading.current_thread().__class__.__name__
 	if not threading.current_thread().__class__.__name__ == "_MainThread":
 		return
 	if __canvas:
