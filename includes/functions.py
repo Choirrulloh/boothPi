@@ -1,4 +1,4 @@
-import time, os.path
+import time, os, os.path
 from distutils import spawn
 from Tkinter import *
 from RPi import GPIO

@@ -1,5 +1,5 @@
 from Tkinter import *
-import threading
+import threading, glob, os
 import Settings, Output, functions, PhotoThread
 
 __root = None
@@ -30,6 +30,19 @@ def display_debug(string):
 		if __debug:
 			__canvas.delete(__debug)
 		__debug = __canvas.create_text(0, 0, text=string, fill="#aaaaaa", font="Lucida 12", anchor="nw")
+
+def display_stats(some_var):
+        clear()
+        text = "Runs during this instance: {}\n".format(Settings.runs)
+        text+= "Number of images in photos/: {}\n".format(len(glob.glob("photos/*---*---?.jpg")))
+        text+= "\n"
+        st = os.statvfs("photos/")
+        text+= "Space available: {} MB\n".format(st.f_bavail * st.f_frsize / 1024 / 1024)
+        text+= "\n"
+        text+= "Press any key to continue"
+        __canvas.create_text(0, 0, text=text, anchor="nw", font="Lucida 30", fill="white")
+        Settings.ON_BUTTON_PRESS = Settings.main_script.start
+        Settings.WAIT_FOR_BUTTON_PRESS = True
 
 def remove_debug_text():
 	if __canvas and __debug:
@@ -95,8 +108,18 @@ def init(function_to_start_with):
 
 	__root.focus_set()
 	__root.focus_force()
-	__root.bind("<Q>", quit)
-	__root.bind("<D>", toggle_debug_mode)
-	__root.bind("<Key>", functions.override_button_press)
+	__root.bind("<Shift_L>", lambda e: None)
+	__root.bind("<Control_L>", lambda e: None)
+	__root.bind("<Alt_L>", lambda e: None)
+	
+	__root.bind("<Shift-Q>", quit)
+	__root.bind("<Shift-D>", toggle_debug_mode)
+	__root.bind("<Shift-P>", functions.single_photo)
+	__root.bind("<Shift-S>", display_stats)
+	__root.bind("<Control-Shift-Alt-Q>", functions.shutdown)
+	__root.bind("<Shift-H>", display_help)
+	
+	__root.bind("<Key>", functions.button_pressed)
+	
 	__root.after(2000, function_to_start_with)
 	__root.mainloop()
