@@ -1,22 +1,22 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 # TODO: Take directory from $1 or something
 
-echo "Setting up Tempdir..."
-tempdir=$(mktemp -d temp.XXXXXX)
-trap 'echo "Removing Tempdir..."; rm -rf "$tempdir"; exit' EXIT INT TERM HUP
+#echo "Setting up Tempdir..."
+#tempdir=$(mktemp -d temp.XXXXXX)
+#trap 'echo "Removing Tempdir..."; rm -rf "$tempdir"; exit' EXIT INT TERM HUP
 
-echo "    Tempdir is $tempdir"
+#echo "    Tempdir is $tempdir"
 
-echo "Copying files to tempdir..."
-files=(*---?.jpg)
+#echo "Copying files to tempdir..."
+#files=(*---?.jpg)
 
-echo -n "    "
-for i in ${files[@]}; do
-	cp "$i" "$tempdir/$i"
-	echo -n "."
-done
-echo " done."
+#echo -n "    "
+#for i in ${files[@]}; do
+#	cp "$i" "$tempdir/$i"
+#	echo -n "."
+#done
+#echo " done."
 
 #echo "Resizing images to 50%..."
 #files=(*---?.jpg)
@@ -27,6 +27,8 @@ echo " done."
 #	echo -n "."
 #done
 #echo " done."
+
+tempdir="."
 
 echo "Reading image size..."
 sources=($tempdir/*---1.jpg)
@@ -41,12 +43,6 @@ echo "    Square size is ${square_size}x${square_size}."
 square_offset=$[(original_w - original_h) / 2]
 echo "    Square offset is ${square_offset}."
 
-line_h=$original_h
-line_w=$[original_h / 45 * 35]
-echo "    Line size is ${line_w}x${line_h}."
-line_offset=$[(original_w - line_w) / 2]
-echo "    Line offset is ${line_offset}."
-
 border_width=$[original_h * 5 / 100]
 echo "    Border width is ${border_width}."
 
@@ -57,6 +53,7 @@ echo "Creating target folders..."
 mkdir -p merged/square
 mkdir -p merged/line
 mkdir -p merged/3lines
+mkdir -p merged/webservice
 
 echo "Creating square images..."
 size=$square_size
@@ -89,8 +86,6 @@ echo " done."
 
 echo "Creating 3x line images..."
 files=(merged/line/*.jpg)
-bord=$border_width
-size=$square_size
 size_w=$[size + bord*2]
 size_h=$[size*4 + bord*5]
 i=0
@@ -103,5 +98,12 @@ while [[ $i -lt ${#files[@]} ]] ; do
 		merged/3lines/$(basename "${file}")
 	echo -n "."
 	i=$( expr $i + 3 )
+done
+echo " done."
+
+echo "Creating photobox webservice images..."
+for i in merged/square/*.jpg; do
+	convert "$i" -resize 50% -quality 90 merged/webservice/$(basename "$i")
+	echo -n "."
 done
 echo " done."
