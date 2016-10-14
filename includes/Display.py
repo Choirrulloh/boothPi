@@ -41,7 +41,7 @@ def clear():
 
 def show_overview():
 	"""Displays the 4 pictures on the screen. Uses PhotoLoadThreads and still is pretty slow..."""
-	global __canvas, __image_size
+	global __canvas, __image_size, __w, __h, download_id
 	__canvas.delete(ALL)
 	Output.debug("image_size is " + str(__image_size))
 	for i in range(4):
@@ -62,7 +62,10 @@ def show_overview():
 		plt.join()
 		Output.debug("Zeige Photo von Nummer " + str(i))
 		__canvas.create_image(x, y, image=plt.get_photo(), anchor=anchor)
-                __canvas.pack()
+        id = __canvas.create_text(__w, __h, text="{} {}".format(functions.download_id[0:4], functions.download_id[4:8]), fill="white", font=Settings.TEXT_ID_FONT, anchor="se")
+        box = __canvas.create_rectangle(__canvas.bbox(id), fill="black")
+        __canvas.tag_lower(box, id)
+        __canvas.pack()
 
 def root(): return __root
 

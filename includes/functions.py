@@ -2,10 +2,11 @@ import time, os.path
 from distutils import spawn
 from Tkinter import *
 from RPi import GPIO
+from random import randint
 import USBDevice, Settings, Script, Output, Display, PhotoThread
 #from PhotoThread import *
 
-override_button_pressed = False
+download_id = None
 
 def quit(some_var):
 	"""Beendet die App."""

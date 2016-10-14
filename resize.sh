@@ -50,6 +50,9 @@ echo "    Line offset is ${line_offset}."
 border_width=$[original_h * 5 / 100]
 echo "    Border width is ${border_width}."
 
+name_offset=$[ ${#tempdir} + 1 + 26 ]
+echo "Filename offset is ${name_offset}."
+
 echo "Creating target folders..."
 mkdir -p merged/square
 mkdir -p merged/line
@@ -60,7 +63,7 @@ size=$square_size
 offs=$square_offset
 bord=$border_width
 for i in ${sources[@]}; do
-	base=${i:0:27}
+	base=${i:0:$name_offset}
 	convert -size $[size*2 + bord*3]x$[size*2 + bord*3] xc:white \
 		${base}---1.jpg[${size}x${size}+${offs}+0] -geometry ${size}x${size}+$[bord]+$[bord] -composite \
 		${base}---2.jpg[${size}x${size}+${offs}+0] -geometry ${size}x${size}+$[bord*2+size]+$[bord] -composite \
@@ -72,12 +75,8 @@ done
 echo " done."
 
 echo "Creating line images..."
-size_w=$line_w
-size_h=$line_h
-offs=$square_offset
-bord=$border_width
 for i in ${sources[@]}; do
-	base=${i:0:27}
+	base=${i:0:$name_offset}
 	convert -size $[size + bord*2]x$[size*4 + bord*5] xc:white \
 		${base}---1.jpg[${size}x${size}+${offs}+0] -geometry ${size}x${size}+$[bord]+$[bord*1+size*0] -composite \
 		${base}---2.jpg[${size}x${size}+${offs}+0] -geometry ${size}x${size}+$[bord]+$[bord*2+size*1] -composite \
