@@ -12,9 +12,21 @@ Settings.PADDING = 20
 
 Settings.VERSION="2"
 
+# Which GPIO pin is used for the button.
+Settings.GPIO = 12
 Settings.SIMULATE_USB_DEVICE = False
 Settings.DEBUG = False
 Settings.DEBUG_SHORT_DELAYS = False
+
+# Run the app in fullscreen. If you're not developing this app, this should almost always be True.
+Settings.FULLSCREEN = True
+
+# Text color for normal messages on screen.
+Settings.TEXT_COLOR = "#45ADA6"
+# Font and size for normal messages.
+Settings.TEXT_FONT  = "Lucida 90"
+# Font and size for the ID shown on the overview.
+Settings.TEXT_ID_FONT = "Lucida 30"
 
 
 from Tkinter import *

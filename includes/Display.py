@@ -17,7 +17,7 @@ def display_text(string):
 	"""Displays a text on the screen."""
 	global __text, __canvas, __w, __h
 	__canvas.delete(__text)
-	__text = __canvas.create_text(__w/2, __h/2, text=string, fill="#45ADA6", anchor="c", font="Lucida 90", justify=CENTER)
+	__text = __canvas.create_text(__w/2, __h/2, text=string, fill=Settings.TEXT_COLOR, anchor="c", font=Settings.TEXT_FONT, justify=CENTER)
 	Output.debug("Text: " + string.replace("\n", "\\n"))
 
 def display_debug(string):
@@ -81,6 +81,7 @@ def init(function_to_start_with):
 	__root = Tk()
 	__w, __h = __root.winfo_screenwidth(), __root.winfo_screenheight()
 	__root.wm_attributes("-topmost", 1)
+	if Settings.FULLSCREEN: __root.attributes("-fullscreen", True)
 	__root.focus()
 	__root.focus_force()
 	__root.geometry("%dx%d+0+0" % (__w, __h))
