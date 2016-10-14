@@ -55,6 +55,9 @@ def show_single_photo():
 	Settings.WAIT_FOR_BUTTON_PRESS = True
 	Settings.ON_BUTTON_PRESS = lambda: Settings.main_script.start()
 
+def shutdown(some_var=None):
+	os.system("sudo shutdown -h now")
+
 def call_photo_thread(number, is_temp_photo=False):
 	"""Tells PhotoThread to take a photo and waits for it to return."""
 	Output.debug("This is call_photo_thread().")
