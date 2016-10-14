@@ -12,29 +12,34 @@ def quit(some_var):
 	global root
 	root.destroy()
 
-def override_button_press(some_var): 
-	global override_button_pressed
-	override_button_pressed = True
-
-def check_button_pressed(first_run=False):
-	"""This method uses polling to wait for someone to push the button."""
-	global root, override_button_pressed
-	if first_run: override_button_pressed = False
-	button_pressed = GPIO.input(12)
-	if button_pressed or override_button_pressed:
-		start_run()
+def button_pressed(some_var=None):
+	if Settings.WAIT_FOR_BUTTON_PRESS:
+		Settings.WAIT_FOR_BUTTON_PRESS = False
+		if Settings.ON_BUTTON_PRESS is not None:
+			Output.debug("Button pressed. Running code")
+			temp = Settings.ON_BUTTON_PRESS
+			Settings.ON_BUTTON_PRESS = None
+			try:
+				Display.root().after_cancel(Settings.AFTER_ID)
+			except Exception as e:
+				pass
+			temp()
+		else:
+			Output.debug("Button pressed, but Settings.ON_BUTTON_PRESS is None.")
 	else:
-		Display.root().after(5, check_button_pressed)
+		Output.debug("Button pressed, but we are not waiting for this event.")
 
-def start_run():
+def start_run(script):
 	"""Starts a new run. Is called whenever someone pushes the button (when the script is waiting for it, of course)."""
 	global filename_schema
-	global canvas
-	global width, space
-	filename_schema = time.strftime("photos/%Y%m%d-%H%M%S---{}.jpg")
-	Script.next_step()
+	global download_id
+	Settings.runs += 1
+	download_id = ''.join(["%s" % randint(0, 9) for num in range(0, 8)])
+	filename_schema = time.strftime("photos/%Y%m%d-%H%M%S---" + download_id + "---{}.jpg")
+	Output.debug("start_run results: download_id=" + download_id + " filename_schema=" + filename_schema)
+	script.next_step()
 
-def call_photo_thread(number):
+def call_photo_thread(number, is_temp_photo=False):
 	"""Tells PhotoThread to take a photo and waits for it to return."""
 	Output.debug("This is call_photo_thread().")
 	global photo_thread
@@ -70,15 +75,20 @@ def check_things():
 
 def root(): return root
 
-def init():
+def init(script_to_run):
 	"""Initializes the photo booth."""
 	global filename_schema, photo_thread
 	check_things()
 
 	filename_schema = "photos/this-should-not-happen---{}.jpg"
+	
+	Settings.main_script = script_to_run
+	
+	Settings.runs = 0
 
 	photo_thread = PhotoThread.PhotoThread()
 	GPIO.setmode(GPIO.BOARD)
-	GPIO.setup(12, GPIO.IN)
+	GPIO.setup(Settings.GPIO, GPIO.IN)
+	GPIO.add_event_detect(Settings.GPIO, GPIO.RISING, callback=button_pressed, bouncetime=200)
 
-	Display.init(lambda: Script.start())
+	Display.init(lambda: script_to_run.start())
