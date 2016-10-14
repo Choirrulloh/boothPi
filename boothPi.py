@@ -8,14 +8,19 @@ from includes import Settings
 # 900ms is the correct value for an EOS 400D in manual mode.
 Settings.PHOTO_DELAY=900
 
+# How much space to leave between the photos when displaying them on screen.
 Settings.PADDING = 20
 
 Settings.VERSION="2"
 
 # Which GPIO pin is used for the button.
 Settings.GPIO = 12
+
+# Debug: Don't use a USB camera, but instead use includes/demo_[1-4].jpg as "photos" if True.
 Settings.SIMULATE_USB_DEVICE = False
+# Debug: Show debug messages on screen. Can also be toggled by Shift-D.
 Settings.DEBUG = False
+# Debug: Massively shorten the delays if True.
 Settings.DEBUG_SHORT_DELAYS = False
 
 # Run the app in fullscreen. If you're not developing this app, this should almost always be True.
