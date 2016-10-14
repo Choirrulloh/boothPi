@@ -40,13 +40,31 @@ def start_run(script):
 	Output.debug("start_run results: download_id=" + download_id + " filename_schema=" + filename_schema)
 	script.next_step()
 
+def single_photo(some_var=None):
+	Output.debug("single_photo started")
+	call_photo_thread(1, is_temp_photo=True)
+	Output.debug("call_photo_thread() returned")
+	Display.root().after(500, show_single_photo)
+
+def show_single_photo():
+	if PhotoThread.photo_load_threads()[0].is_alive():
+		Display.root().after(500, show_single_photo)
+		return
+	Display.show_single_photo()
+	Output.debug("Display.show_single_photo() returned")
+	Settings.WAIT_FOR_BUTTON_PRESS = True
+	Settings.ON_BUTTON_PRESS = lambda: Settings.main_script.start()
+
 def call_photo_thread(number, is_temp_photo=False):
 	"""Tells PhotoThread to take a photo and waits for it to return."""
 	Output.debug("This is call_photo_thread().")
 	global photo_thread
 	global filename_schema
 	Output.debug("photo_thread: " + str(photo_thread))
-	photo_thread.set_data(filename_schema.format(number), number)
+	if is_temp_photo:
+		photo_thread.set_data("temp.jpg", number, fullsize=True)
+	else:
+		photo_thread.set_data(filename_schema.format(number), number)
 	photo_thread.run()
 	while True:
 		Output.debug("Warte auf photo_taken...")

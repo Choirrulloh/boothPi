@@ -11,7 +11,9 @@ def quit(some_var):
 	global __root
 	__root.destroy()
 
-def image_size(): return __image_size
+def image_size(fullscreen=False):
+        if fullscreen: return min(__w, __h)
+        return __image_size
 
 def display_text(string):
 	"""Displays a text on the screen."""
@@ -78,6 +80,16 @@ def show_overview():
         id = __canvas.create_text(__w, __h, text="{} {}".format(functions.download_id[0:4], functions.download_id[4:8]), fill="white", font=Settings.TEXT_ID_FONT, anchor="se")
         box = __canvas.create_rectangle(__canvas.bbox(id), fill="black")
         __canvas.tag_lower(box, id)
+        __canvas.pack()
+
+def show_single_photo():
+        global __canvas, __w, __h
+        clear()
+        Output.debug("This is show_single_photo().")
+        Output.debug("Waiting for PhotoLoadThread to join...")
+        PhotoThread.photo_load_threads()[0].join()
+        Output.debug("Getting photo...")
+        __canvas.create_image(__w/2, __h/2, image=PhotoThread.photo_load_threads()[0].get_photo(), anchor="c")
         __canvas.pack()
 
 def root(): return __root
