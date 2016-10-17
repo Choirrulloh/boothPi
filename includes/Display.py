@@ -71,8 +71,14 @@ def clear():
 	__canvas.delete(ALL)
 
 def show_overview():
-	"""Displays the 4 pictures on the screen. Uses PhotoLoadThreads and still is pretty slow..."""
-	global __canvas, __image_size, __w, __h, download_id
+        """Displays the 4 pictures on the screen. Uses PhotoLoadThreads and still is pretty slow..."""
+        global __canvas, __image_size, __w, __h, download_id
+        Output.debug("This is show_overview()")
+        if PhotoThread.photo_load_threads()[0].is_alive() or PhotoThread.photo_load_threads()[1].is_alive() or PhotoThread.photo_load_threads()[2].is_alive() or PhotoThread.photo_load_threads()[3].is_alive():
+                Output.debug("At least one PLT is still running. Retrying in 0.5 seconds.")
+                Display.root().after(500, show_overview)
+                return
+	
 	__canvas.delete(ALL)
 	Output.debug("image_size is " + str(__image_size))
 	for i in range(4):
@@ -89,8 +95,6 @@ def show_overview():
 		if i==1 or i==3:
 			x = __w/2 + Settings.PADDING/2
 			anchor = anchor + "w"
-		Output.debug("Warte auf Nummer " + str(i))
-		plt.join()
 		Output.debug("Zeige Photo von Nummer " + str(i))
 		__canvas.create_image(x, y, image=plt.get_photo(), anchor=anchor)
         id = __canvas.create_text(__w, __h, text="{} {}".format(functions.download_id[0:4], functions.download_id[4:8]), fill="white", font=Settings.TEXT_ID_FONT, anchor="se")
