@@ -53,6 +53,7 @@ def display_help(some_var):
         text+= "Shift-S: Show some stats.\n"
         text+= "Shift-P: Make and display a single photo.\n"
         text+= "Shift-D: Toggle debug mode.\n"
+        text+= "Shift-R: Return to main script.\n"
         text+= "\n"
         text+= "Control-Shift-Alt-Q: Shutdown.\n"
         text+= "\n"
@@ -143,6 +144,7 @@ def init(function_to_start_with):
 	__root.bind("<Shift-D>", toggle_debug_mode)
 	__root.bind("<Shift-P>", functions.single_photo)
 	__root.bind("<Shift-S>", display_stats)
+	__root.bind("<Shift-R>", functions.restart_run)
 	__root.bind("<Control-Shift-Alt-Q>", functions.shutdown)
 	__root.bind("<Shift-H>", display_help)
 	

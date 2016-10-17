@@ -97,6 +97,10 @@ def check_things():
 
 def root(): return root
 
+def restart_run(some_var=None):
+	cancel_run()
+	Settings.main_script.start()
+
 def init(script_to_run):
 	"""Initializes the photo booth."""
 	global filename_schema, photo_thread
