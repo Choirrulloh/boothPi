@@ -49,10 +49,11 @@ def single_photo(some_var=None):
 	Output.debug("single_photo started")
 	call_photo_thread(1, is_temp_photo=True)
 	Output.debug("call_photo_thread() returned")
-	Display.root().after(500, show_single_photo)
+	show_single_photo()
 
 def show_single_photo():
 	if PhotoThread.photo_load_threads()[0].is_alive():
+		Output.debug("PLT is still running. Sleeping 0.5s before trying again.")
 		Display.root().after(500, show_single_photo)
 		return
 	Display.show_single_photo()
