@@ -33,6 +33,7 @@ def display_debug(string):
 		__debug = __canvas.create_text(0, 0, text=string, fill="#aaaaaa", font="Lucida 12", anchor="nw")
 
 def display_stats(some_var):
+        functions.cancel_run()
         clear()
         text = "Runs during this instance: {}\n".format(Settings.runs)
         text+= "Number of images in photos/: {}\n".format(len(glob.glob("photos/*---*---?.jpg")))
@@ -46,6 +47,7 @@ def display_stats(some_var):
         Settings.WAIT_FOR_BUTTON_PRESS = True
         
 def display_help(some_var):
+        functions.cancel_run()
         clear()
         text = "Shift-Q: Quit this app.\n"
         text+= "Shift-S: Show some stats.\n"

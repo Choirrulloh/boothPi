@@ -20,10 +20,7 @@ def button_pressed(some_var=None):
 			Output.debug("Button pressed. Running code")
 			temp = Settings.ON_BUTTON_PRESS
 			Settings.ON_BUTTON_PRESS = None
-			try:
-				Display.root().after_cancel(Settings.AFTER_ID)
-			except Exception as e:
-				pass
+			cancel_run()
 			temp()
 		else:
 			Output.debug("Button pressed, but Settings.ON_BUTTON_PRESS is None.")
@@ -40,7 +37,15 @@ def start_run(script):
 	Output.debug("start_run results: download_id=" + download_id + " filename_schema=" + filename_schema)
 	script.next_step()
 
+def cancel_run():
+	try:
+		Display.root().after_cancel(Settings.AFTER_ID)
+	except Exception as e:
+		pass
+	Settings.AFTER_ID = None
+
 def single_photo(some_var=None):
+	cancel_run()
 	Output.debug("single_photo started")
 	call_photo_thread(1, is_temp_photo=True)
 	Output.debug("call_photo_thread() returned")
