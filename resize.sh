@@ -2,32 +2,6 @@
 
 # TODO: Take directory from $1 or something
 
-#echo "Setting up Tempdir..."
-#tempdir=$(mktemp -d temp.XXXXXX)
-#trap 'echo "Removing Tempdir..."; rm -rf "$tempdir"; exit' EXIT INT TERM HUP
-
-#echo "    Tempdir is $tempdir"
-
-#echo "Copying files to tempdir..."
-#files=(*---?.jpg)
-
-#echo -n "    "
-#for i in ${files[@]}; do
-#	cp "$i" "$tempdir/$i"
-#	echo -n "."
-#done
-#echo " done."
-
-#echo "Resizing images to 50%..."
-#files=(*---?.jpg)
-#
-#echo -n "    "
-#for i in ${files[@]}; do
-#	convert "$i" -resize 50% "$tempdir/$i"
-#	echo -n "."
-#done
-#echo " done."
-
 tempdir="."
 
 echo "Reading image size..."
