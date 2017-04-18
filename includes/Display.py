@@ -129,6 +129,7 @@ def init(function_to_start_with):
 	if Settings.FULLSCREEN: __root.attributes("-fullscreen", True)
 	__root.focus()
 	__root.focus_force()
+	__root.config(cursor="none")
 	__root.geometry("%dx%d+0+0" % (__w, __h))
 
 	__image_size = (min(__w, __h)-Settings.PADDING)/2
