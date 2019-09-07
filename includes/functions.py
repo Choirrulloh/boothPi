@@ -114,8 +114,8 @@ def init(script_to_run):
 	Settings.runs = 0
 
 	photo_thread = PhotoThread.PhotoThread()
-	GPIO.setmode(GPIO.BOARD)
-	GPIO.setup(Settings.GPIO, GPIO.IN)
-	GPIO.add_event_detect(Settings.GPIO, GPIO.RISING, callback=button_pressed, bouncetime=300)
+	GPIO.setmode(GPIO.BCM)
+	GPIO.setup(Settings.GPIO, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+	GPIO.add_event_detect(Settings.GPIO, GPIO.FALLING, callback=button_pressed, bouncetime=300)
 
 	Display.init(lambda: script_to_run.start())

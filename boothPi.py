@@ -15,7 +15,7 @@ Settings.PADDING = 20
 Settings.VERSION="3"
 
 # Which GPIO pin is used for the button.
-Settings.GPIO = 12
+Settings.GPIO = 21
 
 # Debug: Don't use a USB camera, but instead use includes/demo_[1-4].jpg as "photos" if True.
 Settings.SIMULATE_USB_DEVICE = False
