@@ -1,6 +1,8 @@
 from threading import Thread
-import Settings, Output, Display
-import Image, ImageTk, ImageOps
+import Settings, Output, Display, time
+import PIL
+from PIL import Image, ImageTk, ImageOps
+import os.path
 
 __images = [None, None, None, None]
 
@@ -17,8 +19,9 @@ class PhotoLoadThread(Thread):
 	def run(self):
 		Output.debug("PhotoLoadThread " + str(self.index) + " starting...")
 		# Load the photo
+		time.sleep(1)
 		Output.debug("PhotoLoadThread " + str(self.index) + ": Opening...")
-		self.image = Image.open(self.filename)
+		self.image = Image.open(open("/home/pi/boothPi/" + self.filename))
 		Output.debug("PhotoLoadThread " + str(self.index) + ": Fitting...")
 		self.image = ImageOps.fit(self.image, (Display.image_size(self.fullsize), Display.image_size(self.fullsize)))
 		Output.debug("PhotoLoadThread " + str(self.index) + ": TKing...")
